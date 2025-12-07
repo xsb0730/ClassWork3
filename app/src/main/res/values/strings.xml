@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">ClassWork3</string>
+
+    <!-- 温度显示 -->
+    <string name="temperature_format">%1$s°</string>
+    <string name="temp_range_format">最高: %1$s° 最低: %2$s°</string>
+
+    <!-- 或者使用更灵活的方式 -->
+    <string name="temp_high">最高</string>
+    <string name="temp_low">最低</string>
+    <string name="degree_symbol">°</string>
 </resources>
