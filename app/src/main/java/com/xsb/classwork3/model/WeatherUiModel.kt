@@ -6,7 +6,7 @@ data class WeatherUiModel(
     val highTemp: String,
     val lowTemp: String,
     val weather: String,
-    val dayWeather: String,      // 白天天气
+    val dayWeather: String,       // 白天天气
     val dayTemp: String,          // 白天温度
     val dayWind: String,          // 白天风力
     val nightWeather: String,     // 夜间天气

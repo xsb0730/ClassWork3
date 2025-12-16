@@ -1,6 +1,5 @@
 package com.xsb.classwork3.repository
 
-import android.util.Log
 import com.xsb.classwork3.api.WeatherApiService
 import com.xsb.classwork3.model.WeatherResponse
 import okhttp3.OkHttpClient
@@ -10,21 +9,18 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 class WeatherRepository {
-
-    companion object {
-        private const val TAG = "WeatherRepository"
-    }
-
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
-        level = HttpLoggingInterceptor.Level.BODY
+        level = HttpLoggingInterceptor.Level.BODY       // 打印完整日志
     }
 
+    //构建 OkHttpClient 实例
     private val okHttpClient = OkHttpClient.Builder()
         .addInterceptor(loggingInterceptor)
         .connectTimeout(30, TimeUnit.SECONDS)
         .readTimeout(30, TimeUnit.SECONDS)
-        .build()
+        .build()                    //将 Builder 中所有配置项固化，生成不可变的 OkHttpClient 实例
 
+    //创建一个 Retrofit 实例，接口基础 URL、底层网络客户端（OkHttp）、JSON 数据转换器
     private val retrofit = Retrofit.Builder()
         .baseUrl("https://restapi.amap.com/")
         .client(okHttpClient)
@@ -38,12 +34,11 @@ class WeatherRepository {
 
     suspend fun getWeatherForecast(city: String): Result<WeatherResponse> {
         return try {
-            Log.d(TAG, "请求天气: city=$city, key=$apiKey")
             val response = apiService.getWeatherForecast(city, apiKey)
-            Log.d(TAG, "API 响应成功: ${response.status}")
+
             Result.success(response)
         } catch (e: Exception) {
-            Log.e(TAG, "API 请求失败", e)
+
             Result.failure(e)
         }
     }

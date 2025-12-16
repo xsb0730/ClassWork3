@@ -1,6 +1,5 @@
 package com.xsb.classwork3.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -34,14 +33,8 @@ class WeatherViewModel : ViewModel() {
         "深圳" to "440300"
     )
 
-    companion object {
-        private const val TAG = "WeatherViewModel"
-    }
-
     fun loadWeather(cityName: String) {
         val cityCode = cityCodeMap[cityName] ?: "110000"
-
-        Log.d(TAG, "开始加载天气: 城市=$cityName, 代码=$cityCode")
 
         viewModelScope.launch {
             _isLoading.value = true
@@ -50,14 +43,11 @@ class WeatherViewModel : ViewModel() {
                 val result = repository.getWeatherForecast(cityCode)
 
                 result.onSuccess { response ->
-                    Log.d(TAG, "API 返回: status=${response.status}, info=${response.info}")
 
                     if (response.status == "1") {
                         if (response.forecasts.isNotEmpty()) {
                             val forecast = response.forecasts[0]
                             val casts = forecast.casts
-
-                            Log.d(TAG, "获取到 ${casts.size} 天预报数据")
 
                             if (casts.isNotEmpty()) {
                                 val today = casts[0]
@@ -89,32 +79,26 @@ class WeatherViewModel : ViewModel() {
                                 }
                                 _forecastList.value = forecastUiList
 
-                                Log.d(TAG, "天气数据加载成功")
                             } else {
                                 _error.value = "没有天气数据"
-                                Log.e(TAG, "casts 列表为空")
                             }
                         } else {
                             _error.value = "城市代码错误或无数据"
-                            Log.e(TAG, "forecasts 列表为空")
                         }
                     } else {
                         val errorMsg = "API错误: ${response.info} (${response.infocode})"
                         _error.value = errorMsg
-                        Log.e(TAG, errorMsg)
                     }
                 }
 
                 result.onFailure { exception ->
                     val errorMsg = "网络请求失败: ${exception.message}"
                     _error.value = errorMsg
-                    Log.e(TAG, errorMsg, exception)
                 }
 
             } catch (e: Exception) {
                 val errorMsg = "发生异常: ${e.message}"
                 _error.value = errorMsg
-                Log.e(TAG, errorMsg, e)
             } finally {
                 _isLoading.value = false
             }

@@ -2,6 +2,7 @@ package com.xsb.classwork3.model
 
 import com.google.gson.annotations.SerializedName
 
+//API 响应根类（对应最外层 JSON）
 data class WeatherResponse(
     val status: String,
     val count: String,
@@ -10,6 +11,7 @@ data class WeatherResponse(
     val forecasts: List<Forecast>
 )
 
+//城市级预报类（对应 forecasts 数组的元素）
 data class Forecast(
     val city: String,
     val adcode: String,
@@ -18,6 +20,7 @@ data class Forecast(
     val casts: List<Cast>
 )
 
+//每日天气详情类（对应 casts 数组的元素）
 data class Cast(
     val date: String,
     val week: String,
